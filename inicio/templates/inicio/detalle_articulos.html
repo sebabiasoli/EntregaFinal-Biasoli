@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title_head %}
+<title>Articulo</title>
+{% endblock title_head %}
+
+{% block h1_header %}
+Datos del articulo {{vender.articulo}}
+{% endblock h1_header %}
+
+
+{% block contenido %}
+<li>Precio: {{vender.precio}} </li>
+<li>Fecha de oferta:  {{vender.fecha_de_oferta}} </li>
+<li>Descripcion:  {{vender.descripcion | safe}} </li>
+<li>Vendedor:  {{vender.vendedor}} </li>
+{% endblock contenido %}

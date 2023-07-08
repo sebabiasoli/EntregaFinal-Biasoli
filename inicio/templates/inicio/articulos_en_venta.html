@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title_head %}
+<title>Articulos en venta </title>
+{% endblock title_head %}
+
+{% block h1_header %}
+Articulos en venta 
+{% endblock h1_header %}
+
+{% block contenido %}
+<button>
+<a class="navbar-brand" href={% url 'inicio:iniciar_venta' %}>Vender</a>
+</button>
+<form action="" method="get">
+    {% csrf_token %}
+        {{formulario}}    
+    <button>Buscar</button>
+</form>
+{% if articulos %}
+{% for articulo in articulos %}
+<li> Articulo: {{articulo.articulo}} - Precio: {{articulo.precio}} 
+    <button>
+    <a class="navbar-brand" href={% url 'inicio:detalle_articulos' articulo.id %}>Detalle</a>
+    </button>
+    <button>
+        <a class="navbar-brand" href={% url 'inicio:modificar_articulos' articulo.id %}>Modificar</a>
+    </button>
+    
+    <button>
+        <a class="navbar-brand" href={% url 'inicio:eliminar_articulos' articulo.id %}>Eliminar</a>
+    </button>
+</li>
+{% endfor %}
+{% else %}
+<p>El articulo buscado no se encuentra en venta</p>
+{% endif %}
+
+{% endblock contenido %}

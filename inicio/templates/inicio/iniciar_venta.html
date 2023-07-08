@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title_head %}
+<title>Vender</title>
+{% endblock title_head %}
+
+{% block h1_header %}
+Iniciar venta
+{% endblock h1_header %}
+
+
+{% block contenido %}
+<p> {{mensaje}} </p>
+
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+        {{formulario}}
+        {{formulario.media}}
+    </table>
+    <button>Vender</button>
+</form>
+
+{% endblock contenido %}
+
+
