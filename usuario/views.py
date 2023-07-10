@@ -38,23 +38,25 @@ def login(request):
     return render(request, 'usuario/login.html',  {'formulario': formulario})
 
 
-def registrarse(request):    
+
+
+def registrarse(request):
     if request.method == 'POST':
-        formulario = MiFormularioDeCreacionDeUsuarios(request.POST, request.FILES)
+        formulario = MiFormularioDeCreacionDeUsuarios(
+            request.POST, request.FILES)
         if formulario.is_valid():
-            formulario.save()            
+            user = formulario.save()
+            info_extra = InfoExtra(
+                user=user, avatar=formulario.cleaned_data['avatar'])
+            info_extra.save()
             return redirect('usuario:login')
-        else:
-            return render(request, 'usuario/registro.html', {'formulario': formulario})
-            
-    formulario = MiFormularioDeCreacionDeUsuarios()
+    else:
+        formulario = MiFormularioDeCreacionDeUsuarios()
     return render(request, 'usuario/registro.html', {'formulario': formulario})
 
 
-# @login_required
-# def perfil_usuario(request):
-#     usuario = request.user
-#     return render(request, 'usuario/perfil_usuario.html', {'usuario': usuario})
+
+
 @login_required
 def perfil_usuario(request):
     usuario = request.user

@@ -29,21 +29,6 @@ def articulos_en_venta(request):
     formulario = BuscarArticulo()    
     return render(request, 'inicio/articulos_en_venta.html', {'formulario': formulario, 'articulos':listado_de_articulos})
 
-# @login_required
-# def iniciar_venta(request):
-#     mensaje = ''
-#     if request.method == 'POST':
-#         forumulario = IniciarVentaFormulario(request.POST, request.FILES)
-#         if forumulario.is_valid():
-#             info = forumulario.cleaned_data                    
-#             venta = Vender(articulo=info['articulo'],precio=info['precio'],fecha_de_oferta=info['fecha_de_oferta'], descripcion=info['descripcion'], vendedor=info['vendedor'], imagen=info['imagen'])
-#             venta.save()
-                          
-#             return redirect('inicio:articulos_en_venta')
-#         else:
-#             return render(request, 'inicio/iniciar_venta.html', {'formulario': forumulario})
-#     forumulario = IniciarVentaFormulario()
-#     return render(request, 'inicio/iniciar_venta.html', {'formulario': forumulario, 'mensaje':mensaje})
 
  
 @login_required
