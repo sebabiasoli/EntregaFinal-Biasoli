@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title_head %}
+<title>Perfil</title>
+{% endblock title_head %}
+
+{% block h1_header %}
+Informacion personal del usuario: {{ usuario.username }}
+{% endblock h1_header %}
+
+{% block contenido %}
+<p>Nombre: {{ usuario.first_name }}</p>
+<p>Apellido: {{ usuario.last_name }}</p>
+<p>Correo electrónico: {{ usuario.email }}</p>
+{% if imagen_usuario %}
+    <img src="{{ imagen_usuario.url }}" alt="Foto de perfil">
+{% else %}
+    <p>No se ha proporcionado una foto de perfil.</p>
+{% endif %}
+
+<button>
+    <a class="navbar-brand" href="{% url 'usuario:editar_perfil' %}">Modificar información</a>
+</button>
+{% endblock contenido %}

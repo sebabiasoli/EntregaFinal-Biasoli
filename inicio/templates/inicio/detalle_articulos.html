@@ -6,6 +6,9 @@
 
 {% block h1_header %}
 Datos del articulo {{vender.articulo}}
+{% if vender.imagen %}
+<img src="{{vender.imagen.url}}" alt="Imagen de {{vender.titulo}}" width="600" height="400">
+{% endif %}
 {% endblock h1_header %}
 
 

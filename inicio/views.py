@@ -8,6 +8,8 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from usuario.models import InfoExtra
+from django.contrib.auth import get_user
 # Create your views here.
 
 def inicio(request):
@@ -27,38 +29,82 @@ def articulos_en_venta(request):
     formulario = BuscarArticulo()    
     return render(request, 'inicio/articulos_en_venta.html', {'formulario': formulario, 'articulos':listado_de_articulos})
 
+# @login_required
+# def iniciar_venta(request):
+#     mensaje = ''
+#     if request.method == 'POST':
+#         forumulario = IniciarVentaFormulario(request.POST, request.FILES)
+#         if forumulario.is_valid():
+#             info = forumulario.cleaned_data                    
+#             venta = Vender(articulo=info['articulo'],precio=info['precio'],fecha_de_oferta=info['fecha_de_oferta'], descripcion=info['descripcion'], vendedor=info['vendedor'], imagen=info['imagen'])
+#             venta.save()
+                          
+#             return redirect('inicio:articulos_en_venta')
+#         else:
+#             return render(request, 'inicio/iniciar_venta.html', {'formulario': forumulario})
+#     forumulario = IniciarVentaFormulario()
+#     return render(request, 'inicio/iniciar_venta.html', {'formulario': forumulario, 'mensaje':mensaje})
+
+ 
 @login_required
 def iniciar_venta(request):
     mensaje = ''
     if request.method == 'POST':
-        forumulario = IniciarVentaFormulario(request.POST)
-        if forumulario.is_valid():
-            info = forumulario.cleaned_data
-            venta = Vender(articulo=info['articulo'],precio=info['precio'],fecha_de_oferta=info['fecha_de_oferta'], descripcion=info['descripcion'], vendedor=info['vendedor'])
+        formulario = IniciarVentaFormulario(request.POST, request.FILES)
+        if formulario.is_valid():
+            venta = formulario.save(commit=False)
+            venta.usuario = request.user  # Asigna el usuario actual como creador
             venta.save()
             return redirect('inicio:articulos_en_venta')
         else:
-            return render(request, 'inicio/iniciar_venta.html', {'formulario': forumulario})
-    forumulario = IniciarVentaFormulario()
-    return render(request, 'inicio/iniciar_venta.html', {'formulario': forumulario, 'mensaje':mensaje})
-
-
+            return render(request, 'inicio/iniciar_venta.html', {'formulario': formulario})
+    formulario = IniciarVentaFormulario()
+    return render(request, 'inicio/iniciar_venta.html', {'formulario': formulario, 'mensaje': mensaje})
+ 
    
-class DetalleGato(DetailView):
+class DetalleArticulo(DetailView):
     model = Vender
     template_name = "inicio/detalle_articulos.html"
     
 
-class ModificarGato(LoginRequiredMixin,UpdateView):
+class ModificarArticulo(LoginRequiredMixin,UpdateView):
     model = Vender
-    fields = ['articulo', 'precio', 'fecha_de_oferta', 'descripcion', 'vendedor']
+    fields = ['articulo', 'precio', 'fecha_de_oferta', 'descripcion', 'vendedor', 'imagen']
     template_name = "inicio/modificar_articulos.html"
     success_url = reverse_lazy('inicio:articulos_en_venta')
+    
+    def dispatch(self, request, *args, **kwargs):
+        # Obtiene el objeto a editar
+        self.object = self.get_object()
+
+        # Verifica si el usuario actual es el creador del objeto
+        if self.object.usuario == self.request.user or self.request.user.is_staff:
+            # Redirige al template de modificación del creador
+            self.template_name = 'inicio/modificar_articulos.html'
+        else:
+            # Redirige al template de autorización para otros usuarios
+            self.template_name = 'inicio/autorizacion.html'
+
+        return super().dispatch(request, *args, **kwargs)
 
 
-class EliminarGato(LoginRequiredMixin,DeleteView):
+class EliminarArticulo(LoginRequiredMixin,DeleteView):
     model = Vender
     template_name = "inicio/eliminar_articulos.html"
     success_url = reverse_lazy('inicio:articulos_en_venta')
+    
+    def dispatch(self, request, *args, **kwargs):
+        # Obtiene el objeto a editar
+        self.object = self.get_object()
+
+        # Verifica si el usuario actual es el creador del objeto
+        if self.object.usuario == self.request.user or self.request.user.is_staff:
+            # Redirige al template de modificación del creador
+            self.template_name = 'inicio/eliminar_articulos.html'
+        else:
+            # Redirige al template de autorización para otros usuarios
+            self.template_name = 'inicio/autorizacion.html'
+
+        return super().dispatch(request, *args, **kwargs)
   
    

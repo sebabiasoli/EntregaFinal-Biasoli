@@ -52,6 +52,22 @@ def registrarse(request):
     return render(request, 'usuario/registro.html', {'formulario': formulario})
 
 
+# @login_required
+# def perfil_usuario(request):
+#     usuario = request.user
+#     return render(request, 'usuario/perfil_usuario.html', {'usuario': usuario})
+@login_required
+def perfil_usuario(request):
+    usuario = request.user
+    try:
+        info_extra = InfoExtra.objects.get(user=usuario)
+        imagen_usuario = info_extra.avatar
+    except InfoExtra.DoesNotExist:
+        imagen_usuario = None
+    return render(request, 'usuario/perfil_usuario.html', {'usuario': usuario, 'imagen_usuario': imagen_usuario})
+
+
+
 @login_required
 def edicion_perfil(request):
     info_extra_user = request.user.infoextra

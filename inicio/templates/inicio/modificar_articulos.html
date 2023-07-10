@@ -10,7 +10,7 @@ Modificar Articulo {{vender.articulo}}
 
 
 {% block contenido %}
-<form action= {% url 'inicio:modificar_articulos' vender.id %} method="post">
+<form action= {% url 'inicio:modificar_articulos' vender.id %} method="post" enctype='multipart/form-data'>
     {% csrf_token %}
     <table>
         {{form}}
