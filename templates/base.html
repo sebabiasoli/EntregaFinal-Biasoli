@@ -24,7 +24,18 @@
             <div class="container">
                 <a class="navbar-brand" href={% url 'inicio:inicio' %}>Inicio</a>
                 <a class="navbar-brand" href={% url 'inicio:articulos_en_venta' %}>Listado de articulos en venta</a>
-                {% comment %} <a class="navbar-brand" href={% url 'inicio:articulos' %}>Articulos</a> {% endcomment %}
+                {% if request.user.is_authenticated %}
+                {% if request.user.infoextra.avatar %}
+                <img src={{request.user.infoextra.avatar.url}} alt="" height='40px'>
+                {% endif %}
+                <a class="navbar-brand" href={% url 'usuario:editar_perfil' %}>{{request.user.username}}</a>
+                <a class="btn btn-secondary" href={% url 'usuario:logout' %}>Logout</a>
+                {% else %}
+                <a class="btn btn-primary" href={% url 'usuario:login' %}>Login</a>
+                <a class="btn btn-primary" href={% url 'usuario:registrarse' %}>Registrarse</a>
+                {% endif %}
+                
+                
                 
             </div>
         </nav>

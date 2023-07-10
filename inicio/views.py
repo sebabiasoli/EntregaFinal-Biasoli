@@ -5,6 +5,8 @@ from inicio.models import Vender
 from django.views.generic.edit import UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy    
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
@@ -25,7 +27,7 @@ def articulos_en_venta(request):
     formulario = BuscarArticulo()    
     return render(request, 'inicio/articulos_en_venta.html', {'formulario': formulario, 'articulos':listado_de_articulos})
 
-
+@login_required
 def iniciar_venta(request):
     mensaje = ''
     if request.method == 'POST':
@@ -46,15 +48,15 @@ class DetalleGato(DetailView):
     model = Vender
     template_name = "inicio/detalle_articulos.html"
     
-    
-class ModificarGato(UpdateView):
+
+class ModificarGato(LoginRequiredMixin,UpdateView):
     model = Vender
     fields = ['articulo', 'precio', 'fecha_de_oferta', 'descripcion', 'vendedor']
     template_name = "inicio/modificar_articulos.html"
     success_url = reverse_lazy('inicio:articulos_en_venta')
 
 
-class EliminarGato(DeleteView):
+class EliminarGato(LoginRequiredMixin,DeleteView):
     model = Vender
     template_name = "inicio/eliminar_articulos.html"
     success_url = reverse_lazy('inicio:articulos_en_venta')
