@@ -38,12 +38,11 @@ def login(request):
     return render(request, 'usuario/login.html',  {'formulario': formulario})
 
 
-def registrarse(request):
-    
+def registrarse(request):    
     if request.method == 'POST':
-        formulario = MiFormularioDeCreacionDeUsuarios(request.POST)
+        formulario = MiFormularioDeCreacionDeUsuarios(request.POST, request.FILES)
         if formulario.is_valid():
-            formulario.save()
+            formulario.save()            
             return redirect('usuario:login')
         else:
             return render(request, 'usuario/registro.html', {'formulario': formulario})
