@@ -12,6 +12,7 @@ Informacion personal del usuario: {{ usuario.username }}
 <p>Nombre: {{ usuario.first_name }}</p>
 <p>Apellido: {{ usuario.last_name }}</p>
 <p>Correo electrónico: {{ usuario.email }}</p>
+<p>Datos personales: {{ datos_personales }}</p>
 {% if imagen_usuario %}
     <img src="{{ imagen_usuario.url }}" alt="Foto de perfil">
 {% else %}

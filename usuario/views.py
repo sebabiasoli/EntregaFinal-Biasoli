@@ -63,9 +63,11 @@ def perfil_usuario(request):
     try:
         info_extra = InfoExtra.objects.get(user=usuario)
         imagen_usuario = info_extra.avatar
+        datos_personales = info_extra.datos_personales
     except InfoExtra.DoesNotExist:
         imagen_usuario = None
-    return render(request, 'usuario/perfil_usuario.html', {'usuario': usuario, 'imagen_usuario': imagen_usuario})
+        datos_personales = None
+    return render(request, 'usuario/perfil_usuario.html', {'usuario': usuario, 'imagen_usuario': imagen_usuario, 'datos_personales': datos_personales})
 
 
 
@@ -75,8 +77,12 @@ def edicion_perfil(request):
     if request.method == 'POST':
         formulario = MiFormularioDeEdicionDeDatosDeUsuario(request.POST, request.FILES, instance=request.user)
         if formulario.is_valid():
-            
+            datos_personales = formulario.cleaned_data['datos_personales']
             avatar = formulario.cleaned_data.get('avatar')
+            
+            if datos_personales:
+                info_extra_user.datos_personales = datos_personales
+                info_extra_user.save()
             if avatar:
                 info_extra_user.avatar = avatar
                 info_extra_user.save()

@@ -26,7 +26,7 @@ class MiFormularioDeEdicionDeDatosDeUsuario(UserChangeForm):
     email = forms.EmailField()
     first_name = forms.CharField(label='Nombre', max_length=20)    
     last_name = forms.CharField(label='Apellido', max_length=20)
-    datos_personales = RichTextFormField()
+    datos_personales = RichTextFormField(required=False)
     avatar = forms.ImageField(required=False)  
     
     class Meta:
